@@ -131,6 +131,9 @@
         }
     ];
 
+    let preguntasMezcladas = [];
+
+    // Función para mezclar las preguntas
     function mezclar(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -139,15 +142,16 @@
         return array;
     }
 
+    // Generar el cuestionario de preguntas mezcladas
     function generarCuestionario() {
+        preguntasMezcladas = mezclar([...preguntas]); // Mezclar las preguntas y guardarlas
         const contenedorPreguntas = document.getElementById("preguntas");
-        const preguntasMezcladas = mezclar([...preguntas]); // Mezclar las preguntas
 
         preguntasMezcladas.forEach((pregunta, index) => {
             const divPregunta = document.createElement("div");
-            divPregunta.className = "pregunta"; // Añadir clase para la separación en CSS
+            divPregunta.className = "pregunta";
             divPregunta.innerHTML = `<p>${pregunta.pregunta}</p>`;
-            
+
             pregunta.opciones.forEach((opcion, i) => {
                 const opcionHtml = `
                     <label>
@@ -157,14 +161,15 @@
                 `;
                 divPregunta.innerHTML += opcionHtml;
             });
+
             contenedorPreguntas.appendChild(divPregunta);
         });
     }
 
+    // Validar las respuestas
     function validarRespuestas() {
-        // No vuelvas a mezclar las preguntas aquí, usa las preguntas en el orden que fueron generadas.
-        const opciones = document.getElementsByName(`pregunta${index}`);
-        preguntas.forEach((pregunta, index) => {
+        preguntasMezcladas.forEach((pregunta, index) => {
+            const opciones = document.getElementsByName(`pregunta${index}`);
             let seleccionada = -1;
 
             for (let i = 0; i < opciones.length; i++) {
@@ -183,7 +188,7 @@
                 resultado.className = "incorrecta resultado";
             }
 
-            document.getElementsByTagName("div")[index].appendChild(resultado);
+            document.getElementsByTagName("div")[index + 1].appendChild(resultado); // Index + 1 por el div de preguntas
         });
     }
 
