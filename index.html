@@ -75,6 +75,11 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        .respuesta-correcta {
+            background-color: #f1fcdc; /* Fondo verde sutil */
+            border-radius: 5px;
+            padding: 5px;
+        }
 
     </style>
 </head>
@@ -236,6 +241,7 @@
             const opciones = document.getElementsByName(`pregunta${index}`);
             let seleccionada = -1;
 
+            // Revisar cuál opción fue seleccionada
             for (let i = 0; i < opciones.length; i++) {
                 if (opciones[i].checked) {
                     seleccionada = parseInt(opciones[i].value);
@@ -252,8 +258,12 @@
                 resultado.textContent = "Respuesta incorrecta";
                 resultado.className = "incorrecta resultado";
                 incorrectas++;
+
+                // Resaltar la respuesta correcta si la respuesta fue incorrecta
+                opciones[pregunta.correcta].parentElement.classList.add("respuesta-correcta");
             }
 
+            // Mostrar el resultado en la interfaz
             document.getElementsByTagName("div")[index + 1].appendChild(resultado); // Index + 1 por el div de preguntas
         });
 
@@ -264,6 +274,7 @@
             <p class="incorrecta">Respuestas incorrectas: ${incorrectas}</p>
         `;
     }
+
 
 
     window.onload = generarCuestionario;
