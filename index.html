@@ -298,7 +298,7 @@
     function actualizarIconoCara(correctas, total, contenedor) {
         let carita = '';
         if (correctas === total) {
-            carita = 'Te Amo y eres la mujer de mi vida 😊'; // Todas correctas
+            carita = generarFraseRomantica() + ' 😊'; // Todas correctas
         } else if (correctas > 0) {
             carita = '=/'; // Algunas correctas
         } else {
@@ -309,6 +309,81 @@
         caritaResultado.textContent = `Resultado: ${carita}`;
         contenedor.appendChild(caritaResultado);
     }
+
+    const sujetos = [
+    "Tu sonrisa",
+    "Tus ojos",
+    "Tu voz",
+    "Tu presencia",
+    "Tu risa",
+    "Tu mirada",
+    "Tu alma",
+    "Tu ser",
+    "Tu dulzura",
+    "Tu ternura"
+    ];
+
+    const verbos = [
+        "ilumina",
+        "alegra",
+        "conquista",
+        "inspira",
+        "embellece",
+        "completa",
+        "enriquece",
+        "colorea",
+        "enciende",
+        "transforma"
+    ];
+
+    const adverbios = [
+        "profundamente",
+        "eternamente",
+        "infinitamente",
+        "sinceramente",
+        "apasionadamente",
+        "dulcemente",
+        "intensamente",
+        "ardientemente",
+        "inexplicablemente",
+        "maravillosamente"
+    ];
+
+    const complementos = [
+        "mi corazón",
+        "mi alma",
+        "mi mundo",
+        "mi vida",
+        "mis días",
+        "mis noches",
+        "mis sueños",
+        "mis pensamientos",
+        "mi existencia",
+        "mi universo"
+    ];
+
+    const adjetivos = [
+        "hermoso",
+        "maravilloso",
+        "increíble",
+        "mágico",
+        "especial",
+        "único",
+        "radiante",
+        "espléndido",
+        "sublime",
+        "encantador"
+    ];
+
+    function generarFraseRomantica() {
+        const sujeto = sujetos[Math.floor(Math.random() * sujetos.length)];
+        const verbo = verbos[Math.floor(Math.random() * verbos.length)];
+        const adverbio = adverbios[Math.floor(Math.random() * adverbios.length)];
+        const complemento = complementos[Math.floor(Math.random() * complementos.length)];
+        const adjetivo = adjetivos[Math.floor(Math.random() * adjetivos.length)];
+        return `${sujeto} ${verbo} ${adverbio} ${complemento}`;
+    }
+
 
 
 
@@ -348,10 +423,6 @@
     // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
     window.onload = cargarPreguntas;
 
-
-
-
-    //window.onload = generarCuestionario;
 </script>
 
 </body>
