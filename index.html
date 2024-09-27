@@ -493,9 +493,9 @@
 
 
 
-    function cargarPreguntas() {
+    function cargarPreguntas(inicial = false) {
         const selectElement = document.getElementById("numPreguntas");
-        const numPreguntasSeleccionadas = selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value);
+        const numPreguntasSeleccionadas = inicial ? preguntas.length : (selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value));
 
         let estadosPreguntas = JSON.parse(localStorage.getItem('estadosPreguntas')) || {};
 
@@ -504,17 +504,19 @@
         let preguntasNoRespondidas = preguntas.filter(p => !estadosPreguntas[p.pregunta]);
         let preguntasCorrectas = preguntas.filter(p => estadosPreguntas[p.pregunta] === "correcta");
 
-        // Mostrar incorrectas y no respondidas prioritariamente
-        preguntasMezcladas = [...preguntasIncorrectas, ...preguntasNoRespondidas];
+        // Mostrar incorrectas y no respondidas prioritariamente después de la validación
+        if (!inicial) {
+            preguntasMezcladas = [...preguntasIncorrectas, ...preguntasNoRespondidas];
 
-        // Añadir algunas preguntas correctas aleatoriamente
-        let numCorrectas = numPreguntasSeleccionadas - preguntasMezcladas.length;
-        if (numCorrectas > 0) {
-            let preguntasCorrectasAleatorias = mezclar(preguntasCorrectas).slice(0, numCorrectas);
-            preguntasMezcladas = [...preguntasMezcladas, ...preguntasCorrectasAleatorias];
+            // Añadir algunas preguntas correctas aleatoriamente si no alcanzamos el límite
+            let numCorrectas = numPreguntasSeleccionadas - preguntasMezcladas.length;
+            if (numCorrectas > 0) {
+                let preguntasCorrectasAleatorias = mezclar(preguntasCorrectas).slice(0, numCorrectas);
+                preguntasMezcladas = [...preguntasMezcladas, ...preguntasCorrectasAleatorias];
+            }
+        } else {
+            preguntasMezcladas = mezclar([...preguntas]).slice(0, numPreguntasSeleccionadas);
         }
-
-        preguntasMezcladas = mezclar(preguntasMezcladas).slice(0, numPreguntasSeleccionadas);
 
         // Limpiar el contenedor de preguntas antes de cargar nuevas
         const contenedorPreguntas = document.getElementById("preguntas");
@@ -541,8 +543,18 @@
     }
 
 
+
     // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
-    window.onload = cargarPreguntas;
+    // Cargar todas las preguntas en la carga inicial
+    window.onload = () => {
+        cargarPreguntas(true);  // Cargar todas las preguntas al inicio
+    };
+
+    document.getElementById("numPreguntas").addEventListener("change", function() {
+        cargarPreguntas(false);  // Priorizar preguntas tras cambiar la selección
+    });
+
+
 
 </script>
 
