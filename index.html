@@ -80,12 +80,40 @@
             border-radius: 5px;
             padding: 5px;
         }
+        .selector-preguntas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .selector-preguntas label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .selector-preguntas select {
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
     </style>
 </head>
 <body>
 
 <h1>Cuestionario</h1>
+<div class="selector-preguntas">
+    <label for="numPreguntas">Número de preguntas: </label>
+    <select id="numPreguntas" onchange="cargarPreguntas()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="todas" selected>Todas</option>
+    </select>
+</div>
 
 <form id="cuestionario">
     <div id="preguntas"></div>
@@ -199,6 +227,8 @@
 
     let preguntasMezcladas = [];
 
+    
+
     // Función para mezclar las preguntas
     function mezclar(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -275,9 +305,45 @@
         `;
     }
 
+    // Función para cargar el número de preguntas seleccionadas
+    function cargarPreguntas() {
+        const selectElement = document.getElementById("numPreguntas");
+        const numPreguntasSeleccionadas = selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value);
+
+        // Mezclar y seleccionar las primeras 'numPreguntasSeleccionadas' preguntas
+        preguntasMezcladas = mezclar([...preguntas]).slice(0, numPreguntasSeleccionadas);
+
+        // Limpiar el contenedor de preguntas antes de cargar nuevas
+        const contenedorPreguntas = document.getElementById("preguntas");
+        contenedorPreguntas.innerHTML = ""; 
+
+        // Generar el cuestionario con el número de preguntas seleccionadas
+        preguntasMezcladas.forEach((pregunta, index) => {
+            const divPregunta = document.createElement("div");
+            divPregunta.className = "pregunta";
+            divPregunta.innerHTML = `<p>${pregunta.pregunta}</p>`;
+
+            pregunta.opciones.forEach((opcion, i) => {
+                const opcionHtml = `
+                    <label>
+                        <input type="radio" name="pregunta${index}" value="${i}">
+                        ${opcion}
+                    </label><br>
+                `;
+                divPregunta.innerHTML += opcionHtml;
+            });
+
+            contenedorPreguntas.appendChild(divPregunta);
+        });
+    }
+
+    // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
+    window.onload = cargarPreguntas;
 
 
-    window.onload = generarCuestionario;
+
+
+    //window.onload = generarCuestionario;
 </script>
 
 </body>
