@@ -248,16 +248,17 @@
         return array;
     }
 
-    // Validar las respuestas
+
     function validarRespuestas() {
         let correctas = 0;
         let incorrectas = 0;
 
-        preguntasMezcladas.forEach((pregunta, index) => {
+        const contenedorPreguntas = document.getElementById("preguntas").children;
+
+        Array.from(contenedorPreguntas).forEach((divPregunta, index) => {
             const opciones = document.getElementsByName(`pregunta${index}`);
             let seleccionada = -1;
 
-            // Revisar cuál opción fue seleccionada
             for (let i = 0; i < opciones.length; i++) {
                 if (opciones[i].checked) {
                     seleccionada = parseInt(opciones[i].value);
@@ -266,7 +267,7 @@
             }
 
             const resultado = document.createElement("p");
-            if (seleccionada === pregunta.correcta) {
+            if (seleccionada === preguntasMezcladas[index].correcta) {
                 resultado.textContent = "Respuesta correcta";
                 resultado.className = "correcta resultado";
                 correctas++;
@@ -275,12 +276,12 @@
                 resultado.className = "incorrecta resultado";
                 incorrectas++;
 
-                // Resaltar la respuesta correcta si la respuesta fue incorrecta
-                opciones[pregunta.correcta].parentElement.classList.add("respuesta-correcta");
+                if (opciones[preguntasMezcladas[index].correcta]) {
+                    opciones[preguntasMezcladas[index].correcta].parentElement.classList.add("respuesta-correcta");
+                }
             }
 
-            // Mostrar el resultado en la interfaz
-            document.getElementsByTagName("div")[index + 1].appendChild(resultado); // Index + 1 por el div de preguntas
+            divPregunta.appendChild(resultado);
         });
 
         // Mostrar los resultados finales
@@ -290,21 +291,26 @@
             <p class="incorrecta">Respuestas incorrectas: ${incorrectas}</p>
         `;
 
-        // Mostrar la carita dependiendo del resultado
-        let carita = '';
-        if (correctas === preguntasMezcladas.length) {
-            carita = '😊';  // Carita feliz si todas son correctas
-        } else if (correctas > 0 && correctas < preguntasMezcladas.length) {
-            carita = '=/';  // Carita neutral si hay algunas correctas
-        } else {
-            carita = '😞';  // Carita triste si todas son incorrectas
-        }
-
-        const caritaResultado = document.createElement("p");
-        caritaResultado.style.fontSize = "24px"; // Aumentar el tamaño de la carita
-        caritaResultado.textContent = `Resultado: ${carita}`;
-        contenedorResultados.appendChild(caritaResultado); // Agregar la carita al final
+        // Actualizar el icono de la cara según el resultado
+        actualizarIconoCara(correctas, preguntasMezcladas.length, contenedorResultados);
     }
+
+    function actualizarIconoCara(correctas, total, contenedor) {
+        let carita = '';
+        if (correctas === total) {
+            carita = '😊'; // Todas correctas
+        } else if (correctas > 0) {
+            carita = '=/'; // Algunas correctas
+        } else {
+            carita = '😞'; // Ninguna correcta
+        }
+        const caritaResultado = document.createElement("p");
+        caritaResultado.style.fontSize = "24px";
+        caritaResultado.textContent = `Resultado: ${carita}`;
+        contenedor.appendChild(caritaResultado);
+    }
+
+
 
 
     // Función para cargar el número de preguntas seleccionadas
