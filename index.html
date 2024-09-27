@@ -366,10 +366,12 @@
             if (seleccionada === preguntasMezcladas[index].correcta) {
                 resultado.textContent = "Respuesta correcta";
                 resultado.className = "correcta resultado";
+                guardarEstadoPregunta(index, "correcta");  // Guardar estado correcta
                 correctas++;
             } else {
                 resultado.textContent = "Respuesta incorrecta";
                 resultado.className = "incorrecta resultado";
+                guardarEstadoPregunta(index, "incorrecta");  // Guardar estado incorrecta
                 incorrectas++;
 
                 if (opciones[preguntasMezcladas[index].correcta]) {
@@ -390,6 +392,7 @@
         // Actualizar el icono de la cara según el resultado
         actualizarIconoCara(correctas, preguntasMezcladas.length, contenedorResultados);
     }
+
 
     function actualizarIconoCara(correctas, total, contenedor) {
         let carita = '';
@@ -481,16 +484,37 @@
     }
 
 
+    function guardarEstadoPregunta(index, estado) {
+        // Guardar el estado de la pregunta en localStorage
+        let estadosPreguntas = JSON.parse(localStorage.getItem('estadosPreguntas')) || {};
+        estadosPreguntas[preguntasMezcladas[index].pregunta] = estado;  // Guardar estado por la pregunta textual
+        localStorage.setItem('estadosPreguntas', JSON.stringify(estadosPreguntas));
+    }
 
 
 
-    // Función para cargar el número de preguntas seleccionadas
     function cargarPreguntas() {
         const selectElement = document.getElementById("numPreguntas");
         const numPreguntasSeleccionadas = selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value);
 
-        // Mezclar y seleccionar las primeras 'numPreguntasSeleccionadas' preguntas
-        preguntasMezcladas = mezclar([...preguntas]).slice(0, numPreguntasSeleccionadas);
+        let estadosPreguntas = JSON.parse(localStorage.getItem('estadosPreguntas')) || {};
+
+        // Dividir las preguntas según su estado
+        let preguntasIncorrectas = preguntas.filter(p => estadosPreguntas[p.pregunta] === "incorrecta");
+        let preguntasNoRespondidas = preguntas.filter(p => !estadosPreguntas[p.pregunta]);
+        let preguntasCorrectas = preguntas.filter(p => estadosPreguntas[p.pregunta] === "correcta");
+
+        // Mostrar incorrectas y no respondidas prioritariamente
+        preguntasMezcladas = [...preguntasIncorrectas, ...preguntasNoRespondidas];
+
+        // Añadir algunas preguntas correctas aleatoriamente
+        let numCorrectas = numPreguntasSeleccionadas - preguntasMezcladas.length;
+        if (numCorrectas > 0) {
+            let preguntasCorrectasAleatorias = mezclar(preguntasCorrectas).slice(0, numCorrectas);
+            preguntasMezcladas = [...preguntasMezcladas, ...preguntasCorrectasAleatorias];
+        }
+
+        preguntasMezcladas = mezclar(preguntasMezcladas).slice(0, numPreguntasSeleccionadas);
 
         // Limpiar el contenedor de preguntas antes de cargar nuevas
         const contenedorPreguntas = document.getElementById("preguntas");
@@ -515,6 +539,7 @@
             contenedorPreguntas.appendChild(divPregunta);
         });
     }
+
 
     // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
     window.onload = cargarPreguntas;
