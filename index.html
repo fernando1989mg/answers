@@ -99,6 +99,28 @@
             border: 1px solid #ccc;
         }
 
+        /* Media query para pantallas móviles (por debajo de 600px de ancho) */
+        @media only screen and (max-width: 600px) {
+            body {
+                font-size: 18px; /* Aumenta el tamaño del texto para móviles */
+            }
+
+            h1 {
+                font-size: 24px; /* Aumenta el tamaño del título en móviles */
+            }
+
+            button {
+                font-size: 18px; /* Aumenta el tamaño del texto del botón en móviles */
+            }
+
+            .pregunta p {
+                font-size: 18px; /* Aumenta el tamaño del texto de las preguntas en móviles */
+            }
+
+            label {
+                font-size: 18px; /* Aumenta el tamaño del texto de las opciones en móviles */
+            }
+        }
     </style>
 </head>
 <body>
@@ -267,8 +289,46 @@
             pregunta: "¿Qué indica una luz amarilla intermitente en un semáforo?",
             opciones: ["Pare", "Advierte peligro", "Seguir una marcha normal"],
             correcta: 1
+        },
+        {
+            "pregunta": "En esta perspectiva relativa, se nos hace creer que:",
+            "opciones": [
+                "Están en pendiente.",
+                "El más grande está más lejos.",
+                "El más pequeño está más lejos."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "Al estacionar su vehículo en un lugar en el que no hay señales que lo permitan ni que lo prohíban, usted NO debe ....",
+            "opciones": [
+                "Estacionar al costado derecho de la calzada.",
+                "Dejar el freno de mano puesto.",
+                "Detener el motor.",
+                "Obstaculizar el tránsito a otros usuarios de la vía."
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "La OMS considera los siniestros de tránsito como problema prioritario:",
+            "opciones": [
+                "Por la cantidad de infracciones.",
+                "Por el dinero gastado en los siniestros.",
+                "Por la cantidad de muertes ocurridas.",
+                "Por la cantidad de jóvenes con licencia."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "Los siniestros de tránsito:",
+            "opciones": [
+                "Tienen como consecuencia sólo la muerte.",
+                "Somos conscientes del problema pero no hacemos nada.",
+                "Se reducen con leyes más rígidas.",
+                "Son un problema de primer orden."
+            ],
+            "correcta": 3
         }
-
     ];
 
     let preguntasMezcladas = [];
