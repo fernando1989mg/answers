@@ -85,6 +85,7 @@
 <form id="cuestionario">
     <div id="preguntas"></div>
     <button type="button" onclick="validarRespuestas()">Validar Respuestas</button>
+    <div id="resultados"></div>
 </form>
 
 <script>
@@ -178,6 +179,16 @@
             pregunta: "De las siguientes capacidades de un individuo, ¿cuál o cuáles de ellas NO se ve afectada por el consumo de alcohol?",
             opciones: ["El juicio acerca de la velocidad.", "Los tiempos de reacción.", "Ninguna de las mencionadas.", "La coordinación"],
             correcta: 2
+        },
+        {
+            pregunta: "Una persona va conduciendo a 50 km/h por un camino de asfalto plano, con buenas condiciones climáticas y en un vehículo con neumáticos y frenos en buen estado. En estas circunstancias, ¿aproximadamente cuánto se demora el conductor en detener su vehículo?",
+            opciones: ["15 metros.", "65 metros.", "35 metros."],
+            correcta: 2
+        },
+        {
+            pregunta: "¿Qué significan las tachas rojas al costado de la vía?",
+            opciones: ["Precaución.", "Estacionamiento.", "Peligro, no deben ser cruzadas."],
+            correcta: 2
         }
     ];
 
@@ -218,6 +229,9 @@
 
     // Validar las respuestas
     function validarRespuestas() {
+        let correctas = 0;
+        let incorrectas = 0;
+
         preguntasMezcladas.forEach((pregunta, index) => {
             const opciones = document.getElementsByName(`pregunta${index}`);
             let seleccionada = -1;
@@ -233,14 +247,24 @@
             if (seleccionada === pregunta.correcta) {
                 resultado.textContent = "Respuesta correcta";
                 resultado.className = "correcta resultado";
+                correctas++;
             } else {
                 resultado.textContent = "Respuesta incorrecta";
                 resultado.className = "incorrecta resultado";
+                incorrectas++;
             }
 
             document.getElementsByTagName("div")[index + 1].appendChild(resultado); // Index + 1 por el div de preguntas
         });
+
+        // Mostrar los resultados finales
+        const contenedorResultados = document.getElementById("resultados");
+        contenedorResultados.innerHTML = `
+            <p class="correcta">Respuestas correctas: ${correctas}</p>
+            <p class="incorrecta">Respuestas incorrectas: ${incorrectas}</p>
+        `;
     }
+
 
     window.onload = generarCuestionario;
 </script>
