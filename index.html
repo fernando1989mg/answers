@@ -162,9 +162,9 @@
     }
 
     function validarRespuestas() {
-        const preguntasMezcladas = mezclar([...preguntas]);
-        preguntasMezcladas.forEach((pregunta, index) => {
-            const opciones = document.getElementsByName(`pregunta${index}`);
+        // No vuelvas a mezclar las preguntas aquí, usa las preguntas en el orden que fueron generadas.
+        const opciones = document.getElementsByName(`pregunta${index}`);
+        preguntas.forEach((pregunta, index) => {
             let seleccionada = -1;
 
             for (let i = 0; i < opciones.length; i++) {
