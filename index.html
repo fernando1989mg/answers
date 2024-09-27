@@ -90,158 +90,43 @@
 <script>
     const preguntas = [
         {
-            pregunta: "¿Qué color de casco es MENOS recomendable para disminuir accidentes de tránsito?",
-            opciones: ["Rojo", "Café oscuro", "Blanco"],
-            correcta: 1
-        },
-        {
-            pregunta: "Si el derrape es fuerte, como norma general:",
-            opciones: ["No debe frenar ni desembragar.", "Gire el volante hacia el lado al que NO se derrapan las ruedas traseras", "Levante el pie del acelerador"],
-            correcta: 0
-        },
-        {
-            pregunta: "Si una copa de vino arroja de promedio un % de concentración de alcohol de 0,40 g/l, ¿Cuál será su estado al beber una copa de vino?",
-            opciones: ["Quedará bajo el criterio del carabinero y su posibilidad de sufrir un accidente aumentará el triple.", "Bajo la influencia del alcohol y su posibilidad de sufrir un siniestro aumentará al doble.", "En estado de ebriedad y la posibilidad de sufrir un siniestro aumentará 5 veces."],
-            correcta: 0
-        },
-        {
-            pregunta: "De las siguientes capacidades de un individuo, ¿cuál o cuáles de ellas NO se ve afectada por el consumo de alcohol?",
-            opciones: ["El juicio acerca de la velocidad.", "Ninguna de las mencionadas", "La coordinación"],
-            correcta: 1
-        },
-        {
-            pregunta: "Usted va a 70 km/hr. Aproximadamente, ¿qué distancia recorrerá su vehículo desde el momento en que usted se percata de un peligro que hay más adelante hasta que comienza a frenar?",
-            opciones: ["Unos 8 metros.", "Unos 20 metros.", "Unos 5 metros."],
-            correcta: 1
-        },
-        {
-            pregunta: "¿Qué significan las tachas rojas al costado de la vía?",
-            opciones: ["Precaución", "Estacionamiento", "Peligro, no deben ser cruzadas"],
+            pregunta: "Usted va por una calle de doble sentido de tránsito. Para virar a la izquierda, ¿dónde debería ubicarse?",
+            opciones: ["Justo a la izquierda de la línea de centro de calzada", "Lo más a la derecha posible", "Justo a la derecha de la línea de centro de calzada"],
             correcta: 2
         },
         {
-            pregunta: "¿Qué efectos producen el sueño al conducir?",
-            opciones: ["(microsueños). Ocurren muchos accidentes por esta causa.", "Disminución de la capacidad de reacción", "Todas las mencionadas"],
+            pregunta: "Si a usted le realizan una prueba de alcoholemia y ha estado fumando, ¿le puede afectar el hecho de haber fumado en el resultado de la prueba?",
+            opciones: ["Depende de la ingesta.", "Si", "No"],
             correcta: 2
         },
         {
-            pregunta: "Una persona va conduciendo a 50km/h por un camino de asfalto plano. ¿Aproximadamente cuánto se demora el conductor en detener su vehículo?",
-            opciones: ["15 Metros.", "65 Metros.", "35 Metros."],
-            correcta: 2
-        },
-        {
-            pregunta: "En los motores de dos tiempos, ¿cómo debe ser el silenciador?",
-            opciones: ["Más resistente, para aprovechar al máximo el sistema de escape.", "Menos resistente, para aprovechar al máximo la potencia del motor.", "Más resistente, para aprovechar al máximo la potencia del motor."],
-            correcta: 2
-        },
-        {
-            pregunta: "Si no hay señal de demarcación que prohíba el estacionamiento, ¿A qué distancia mínima de una señal de parada de locomoción colectiva puede estacionar un conductor?",
-            opciones: ["20 Metros.", "15 Metros.", "10 Metros."],
-            correcta: 0
-        },
-        {
-            pregunta: "¿Qué acción deben tomar los conductores al enfrentar una luz roja intermitente en un semáforo?",
-            opciones: ["Aumentar la velocidad para cruzar rápidamente.", "Detenerse antes de la línea de detención.", "Ceder el paso y continuar solo cuando no haya riesgo de accidente."],
-            correcta: 2
-        },
-        {
-            pregunta: "¿Cuál de las siguientes opciones NO corresponde a una infracción gravísima?",
-            opciones: ["No respetar una señal PARE.", "No respetar la luz roja de un semáforo.", "No respetar el derecho preferente de un peatón."],
-            correcta: 0
-        },
-        {
-            pregunta: "La seguridad activa se define como:",
-            opciones: ["Es aquella que sirve para evitar que se produzca un accidente.", "Tiene como objetivo minimizar las consecuencias de un accidente.", "Es aquella que actúa en los frenos del vehículo, para evitar algún tipo de accidente."],
-            correcta: 0
-        },
-        {
-            pregunta: "¿Cuál es la sanción por participar en un siniestro de tránsito sin daños ni lesiones y huir del lugar?",
-            opciones: ["Una multa de 1 UTM.", "Una multa de 3 a 7 UTM y suspensión de la licencia hasta por 1 mes.", "Una multa de 1 a 3 UTM."],
+            pregunta: "¿Qué precaución se debe tomar para conducir por una calzada cubierta con nieve?",
+            opciones: ["Acelerar solo en las partes rectas, frenar antes de cada curva, para evitar la pérdida de control del vehículo.", "Evitar frenadas aceleradas, manteniendo una velocidad baja en el cambio más alto posible, para evitar que las ruedas patinen.", "Conducir siempre en la primera relación de marchas, porque al ser la más potente, el conductor podrá mantener el control del vehículo."],
             correcta: 1
         },
         {
-            pregunta: "¿Cuál es la proporción de aumento en la distancia de frenado si se duplica la velocidad del vehículo?",
-            opciones: ["6 veces.", "9 veces.", "4 veces."],
-            correcta: 2
-        },
-        {
-            pregunta: "En caso de un accidente vehicular, ¿el seguro obligatorio SOAP cubre los daños a los vehículos involucrados?",
-            opciones: ["No, solo cubre los riesgos de muerte y lesiones de personas.", "Sí, hasta un 25% de los daños siempre que se deje constancia.", "Sí, hasta un 50% de los daños siempre que se deje constancia."],
+            pregunta: "Con respecto al funcionamiento del vehículo, ¿qué afirmación es verdadera?",
+            opciones: ["Casi siempre, el motor se enfría con un líquido refrigerante que circula por canales en el bloque del motor.", "Cuando el motor está siendo lubricado se enciende una luz testigo en el panel de instrumentos del vehículo", "Una batería mal cargada hace que el vehículo tenga un mejor arranque"],
             correcta: 0
         },
         {
-            pregunta: "¿Al adelantar un vehículo de grandes dimensiones, dónde debe tener especial cuidado?",
-            opciones: ["Al acceder y salir de la sombra de viento del vehículo.", "Detrás del vehículo de grandes dimensiones.", "Al regresar a la pista."],
+            pregunta: "¿Cuál de estas afirmaciones es FALSA tratándose de conducción con niebla?",
+            opciones: ["Con niebla se reduce la visibilidad", "Con niebla se aumenta la adherencia de los neumáticos.", "Con niebla existe el mismo peligro que cuando comienza a llover."],
+            correcta: 1
+        },
+        {
+            pregunta: "Al momento de un adelantamiento de un vehículo de grandes dimensiones, ¿dónde debe tener especial cuidado?",
+            opciones: ["Al acceder y al salir de la sombra de viento que le proporcionará dicho vehículo durante la maniobra", "Detrás del vehículo de grandes dimensiones", "Al regresar a la pista"],
             correcta: 0
         },
         {
-            pregunta: "Conducir con niebla es peligroso. ¿Cuál de estas afirmaciones es FALSA?",
-            opciones: ["Con niebla se reduce la visibilidad.", "Con niebla se aumenta la adherencia de los neumáticos.", "Con niebla existe el mismo peligro que cuando comienza a llover."],
-            correcta: 1
-        },
-        {
-            pregunta: "El efecto después de fumar pasta base es:",
-            opciones: ["Rápido e intenso, aparece en un lapso de segundos y dura algunos minutos.", "Lento y progresivo, dura horas.", "Progresivo y moderado, con efectos inmediatos."],
+            pregunta: "En caso de un accidente vehicular, ¿el seguro obligatorio de accidentes personales cubre los daños a los vehículos involucrados?",
+            opciones: ["No, pues solo ampara los riesgos de muerte y lesiones de las personas a consecuencia del accidente.", "Sí, hasta un 25% de los daños siempre y cuando se deje la constancia respectiva en la unidad policial más cercana al lugar del accidente.", "Sí, hasta un 50% de los daños siempre y cuando se deje la constancia respectiva en la unidad policial más cercana al lugar del accidente"],
             correcta: 0
         },
         {
-            pregunta: "Si un conductor presenta una tasa de alcohol en sangre entre 0.3 y 0.5 gr/l, ¿cuál es el riesgo de accidente?",
-            opciones: ["Cinco veces más que si no hubiera bebido.", "El doble que si no hubiera bebido.", "No hay riesgo, esa cantidad no afecta."],
-            correcta: 1
-        },
-        {
-            pregunta: "¿Cuál de las siguientes afirmaciones NO corresponde a las alteraciones de movimiento por fatiga en el conductor?",
-            opciones: ["Menor tiempo de reacción.", "Movimientos indicadores de fatiga como bostezos.", "Movimientos más lentos e imprecisos."],
-            correcta: 0
-        },
-        {
-            pregunta: "Una persona va conduciendo a 50km/h por un camino de asfalto plano y con buenas condiciones. ¿Cuánto aproximadamente demorará en detener su vehículo?",
-            opciones: ["15 Metros.", "65 Metros.", "35 Metros."],
-            correcta: 2
-        },
-        {
-            pregunta: "¿Cuánto aumenta el riesgo de accidente para un conductor con una tasa de alcohol entre 0,3 y 0,5 gr/l?",
-            opciones: ["Cinco veces más que si no hubiera bebido.", "El doble que si no hubiera bebido.", "No hay riesgo de accidente con esa cantidad."],
-            correcta: 1
-        },
-        {
-            pregunta: "¿Qué luz obliga a detenerse además de la luz roja de un semáforo?",
-            opciones: ["Luz amarilla intermitente.", "Luz roja intermitente.", "Luz amarilla no intermitente."],
-            correcta: 1
-        },
-        {
-            pregunta: "Marihuana se clasifica como:",
-            opciones: ["Una droga suave.", "Un estupefaciente.", "Una droga dura."],
-            correcta: 1
-        },
-        {
-            pregunta: "¿Cuál es la distancia mínima que debe mantener un conductor al estacionar cerca de una parada de locomoción colectiva?",
-            opciones: ["20 metros.", "15 metros.", "10 metros."],
-            correcta: 0
-        },
-        {
-            pregunta: "Al realizar un viraje a la derecha, ¿qué señal es VERDADERA?",
-            opciones: ["Debe mirar ambos espejos antes de girar.", "Debe mantener una velocidad constante.", "Debe ceder el paso a vehículos que vienen en sentido contrario."],
-            correcta: 0
-        },
-        {
-            pregunta: "¿Cuándo mayor puede ser el riesgo de accidente para un conductor que presenta una tasa de alcohol en la sangre entre 0,3 y 0,5 gr/l?",
-            opciones: ["El riesgo de accidente es cinco veces mayor que si no hubiera bebido.", "El riesgo de accidente es el doble que si no hubiera bebido.", "No hay riesgo porque esa cantidad no afecta los sentidos."],
-            correcta: 1
-        },
-        {
-            pregunta: "Si hablamos del desarrollo de la moral, ¿Cuál de estas sería una conducta que presenta deficiencias en la madurez personal?",
-            opciones: ["Un conductor tiene la capacidad de mantener la atención y concentración durante largo tiempo", "Un conductor debe considerar que la conducta errónea de otros conductores o peatones es producto de ignorancia y que no es intencionada", "Un conductor que desea demostrar su superioridad, siente que su vehículo es un instrumento con el que puede fortalecer su personalidad, ser más osado y más independiente"],
-            correcta: 2
-        },
-        {
-            pregunta: "Usted conduce a 90 km/h. En condiciones normales, ¿cuál es la distancia mínima de seguridad que usted debería mantener respecto del vehículo que va adelante?",
-            opciones: ["Unos 15 metros", "Unos 75 metros", "Unos 100 metros", "Unos 20 metros"],
-            correcta: 1
-        },
-        {
-            pregunta: "¿Qué indica una luz amarilla intermitente en un semáforo?",
-            opciones: ["Pare", "Advierte peligro", "Seguir una marcha normal"],
+            pregunta: "La sanción por participar en un siniestro de tránsito sin daños ni lesiones y huir del lugar es:",
+            opciones: ["Una multa de 1 UTM.", "Una multa de 3 a 7 UTM y suspensión de la licencia de conductor hasta por 1 mes.", "Una multa de 1 a 3 UTM"],
             correcta: 1
         }
     ];
