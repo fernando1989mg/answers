@@ -222,6 +222,16 @@
             pregunta: "¿Qué significan las tachas rojas al costado de la vía?",
             opciones: ["Precaución.", "Estacionamiento.", "Peligro, no deben ser cruzadas."],
             correcta: 2
+        },
+        {
+            pregunta: "¿Qué efectos producen el sueño al conducir?",
+            opciones: ["(Microsueños). Ocurren muchos accidentes por esta causa, ya que suelen pasar inadvertidos.", "Disminución de la capacidad de reacción (aumenta el tiempo de reacción) y de percepción (se precisan estímulos más altos).", "Visión borrosa, fatiga ocular y mayor sensibilidad al deslumbramiento.", "Todas las mencionadas."],
+            correcta: 3
+        },
+        {
+            pregunta: "Usted va a 70 km/h. Aproximadamente, ¿qué distancia recorrerá su vehículo desde el momento en que usted se percata de un peligro que hay más adelante hasta que comienza a frenar?",
+            opciones: ["Unos 8 metros.", "Unos 20 metros.", "Unos 5 metros."],
+            correcta: 1
         }
     ];
 
@@ -238,29 +248,6 @@
         return array;
     }
 
-    // Generar el cuestionario de preguntas mezcladas
-    function generarCuestionario() {
-        preguntasMezcladas = mezclar([...preguntas]); // Mezclar las preguntas y guardarlas
-        const contenedorPreguntas = document.getElementById("preguntas");
-
-        preguntasMezcladas.forEach((pregunta, index) => {
-            const divPregunta = document.createElement("div");
-            divPregunta.className = "pregunta";
-            divPregunta.innerHTML = `<p>${pregunta.pregunta}</p>`;
-
-            pregunta.opciones.forEach((opcion, i) => {
-                const opcionHtml = `
-                    <label>
-                        <input type="radio" name="pregunta${index}" value="${i}">
-                        ${opcion}
-                    </label><br>
-                `;
-                divPregunta.innerHTML += opcionHtml;
-            });
-
-            contenedorPreguntas.appendChild(divPregunta);
-        });
-    }
 
     // Validar las respuestas
     function validarRespuestas() {
@@ -321,7 +308,7 @@
         preguntasMezcladas.forEach((pregunta, index) => {
             const divPregunta = document.createElement("div");
             divPregunta.className = "pregunta";
-            divPregunta.innerHTML = `<p>${pregunta.pregunta}</p>`;
+            divPregunta.innerHTML = `<p><strong style='color:black;font-weight:bold'>${index + 1}:</strong> ${pregunta.pregunta}</p>`;
 
             pregunta.opciones.forEach((opcion, i) => {
                 const opcionHtml = `
