@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Aleatorio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .pregunta {
+            margin-bottom: 40px; /* Aumenta la separación entre las preguntas */
+        }
+        .pregunta p {
+            font-weight: bold;
+            margin-bottom: 20px; /* Aumenta la separación entre el texto de la pregunta y las opciones */
+            color: #555;
+        }
+        label {
+            display: block;
+            margin-bottom: 15px; /* Aumenta la separación entre las alternativas */
+            padding-left: 10px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .correcta {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrecta {
+            color: red;
+            font-weight: bold;
+        }
+        .resultado {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .correcta.resultado {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrecta.resultado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .respuesta-correcta {
+            background-color: #f1fcdc; /* Fondo verde sutil */
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .selector-preguntas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .selector-preguntas label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .selector-preguntas select {
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Media query para pantallas móviles (por debajo de 600px de ancho) */
+        @media only screen and (max-width: 600px) {
+            body {
+                font-size: 18px; /* Aumenta el tamaño del texto para móviles */
+            }
+
+            h1 {
+                font-size: 24px; /* Aumenta el tamaño del título en móviles */
+            }
+
+            button {
+                font-size: 18px; /* Aumenta el tamaño del texto del botón en móviles */
+            }
+
+            .pregunta p {
+                font-size: 19px; /* Aumenta el tamaño del texto de las preguntas en móviles */
+            }
+
+            label {
+                font-size: 19px; /* Aumenta el tamaño del texto de las opciones en móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cuestionario</h1>
+<div class="selector-preguntas">
+    <label for="numPreguntas">Número de preguntas: </label>
+    <select id="numPreguntas" onchange="cargarPreguntas()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="todas" selected>Todas</option>
+    </select>
+</div>
+
+<form id="cuestionario">
+    <div id="preguntas"></div>
+    <button type="button" onclick="validarRespuestas()">Validar Respuestas</button>
+    <div id="resultados"></div>
+</form>
+
+<p>rama main</p>
+<script>
+    const preguntas = [
+        {
+            "pregunta": "La OMS considera los siniestros de tránsito como problema prioritario:",
+            "opciones": [
+                "Por la cantidad de infracciones.",
+                "Por el dinero gastado en los siniestros.",
+                "Por la cantidad de muertes ocurridas.",
+                "Por la cantidad de jóvenes con licencia."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "Los siniestros de tránsito:",
+            "opciones": [
+                "Tienen como consecuencia sólo la muerte.",
+                "Somos conscientes del problema pero no hacemos nada.",
+                "Se reducen con leyes más rígidas.",
+                "Son un problema de primer orden."
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "¿Cuál es la razón más importante por la que se deben mantener los neumáticos a la presión indicada por el fabricante?",
+            "opciones": [
+                "Para evitar que el automóvil patine.",
+                "Para mantener el vehículo a la altura correcta sobre la vía.",
+                "Para impedir que el automóvil se incline hacia un lado."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "En los motores de dos tiempos, ¿cómo debe ser el silenciador?",
+            "opciones": [
+                "Más resistente, para aprovechar al máximo la potencia del motor.",
+                "Menos resistente, para aprovechar al máximo la potencia del motor.",
+                "Más resistente, para aprovechar al máximo el sistema de escape."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Cuántos tipos de frenos poseen las motocicletas (sistema hidráulico)?",
+            "opciones": [
+                "Solo 1.",
+                "2, independientes.",
+                "3, independientes.",
+                "2, dependientes."
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿Qué significa que un neumático esté 're-dibujado'?",
+            "opciones": [
+                "Que evidencie profundizaciones de los surcos en la banda de rodamiento.",
+                "Que muestra alteraciones en su índice de carga.",
+                "Que haya perdido sus condiciones de adherencia al pavimento."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "Generalmente, ¿Dónde va situado el termostato en un motor?",
+            "opciones": [
+                "En el bloque motor, en la salida del líquido hacia el radiador.",
+                "En el vaso de expansión no permitiendo el paso de líquido refrigerante hasta que haya alcanzado la temperatura adecuada.",
+                "En el depósito de refrigerante.",
+                "En el radiador."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Cómo podemos detectar que un amortiguador se encuentra en mal estado?",
+            "opciones": [
+                "Al frenar, el vehículo se inclina demasiado hacia delante y se levanta de atrás.",
+                "Al circular, el vehículo no se balancea.",
+                "Los neumáticos se desgastan de manera regular.",
+                "Durante la marcha, NO se notan las alteraciones del camino."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "En cuanto al manejo de luces en un encuentro. ¿Qué afirmación es correcta?",
+            "opciones": [
+                "Baje sus luces lo más rápido posible para evitar un accidente.",
+                "Baje sus luces con suficiente anticipación, pero no lo haga demasiado pronto.",
+                "Suba sus luces con anticipación suficiente."
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "Con respecto al sistema de escape..indique la afirmación INCORRECTA:",
+            "opciones": [
+                "Un sistema de escape de gases oxidado puede hacer que penetre monóxido de carbono al interior del vehículo.",
+                "Los gases de escape no son peligrosos para la salud de las personas y los vapores de la gasolina son inocuos.",
+                "Los gases de escape contienen monóxido de carbono, que carece de olor y es incoloro."
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿De qué forma se calcula la distancia de reacción?",
+            "opciones": [
+                "Usted puede estimar aproximadamente la distancia de reacción, multiplicando por cinco la primera cifra de la velocidad.",
+                "Usted puede estimar aproximadamente la distancia de reacción, multiplicando por cuatro la primera cifra de la velocidad.",
+                "Usted puede estimar aproximadamente la distancia de reacción, multiplicando por tres la primera cifra de la velocidad."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuándo NO será importante usar los espejos retrovisores de su vehículo?",
+            "opciones": [
+                "Antes de cambiarse de pista y adelantar.",
+                "Antes de señalizar.",
+                "Antes de hacer partir el motor al arrancar."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "Una de las causas de que el motor de arranque No funcione es:",
+            "opciones": [
+                "Bobina en mal estado.",
+                "Bornes de la batería sulfatados.",
+                "Cables de las bujías desconectados."
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "¿A qué elemento va sujeta la horquilla delantera?",
+            "opciones": [
+                "Amortiguadores telescópicos.",
+                "Chasis.",
+                "Espiral."
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "Para verificar el correcto funcionamiento de la luz de freno trasera debemos...",
+            "opciones": [
+                "Accionar solo el freno delantero.",
+                "Accionar solo el freno trasero.",
+                "Accionar ambos frenos a la vez o cada uno por separado."
+            ],
+            "correcta": 2
+        }
+
+    ];
+
+    let preguntasMezcladas = [];
+
+    
+
+    // Función para mezclar las preguntas
+    function mezclar(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Intercambiar elementos
+        }
+        return array;
+    }
+
+
+    function validarRespuestas() {
+        let correctas = 0;
+        let incorrectas = 0;
+
+        const contenedorPreguntas = document.getElementById("preguntas").children;
+
+        Array.from(contenedorPreguntas).forEach((divPregunta, index) => {
+            const opciones = document.getElementsByName(`pregunta${index}`);
+            let seleccionada = -1;
+
+            for (let i = 0; i < opciones.length; i++) {
+                if (opciones[i].checked) {
+                    seleccionada = parseInt(opciones[i].value);
+                    break;
+                }
+            }
+
+            const resultado = document.createElement("p");
+            if (seleccionada === preguntasMezcladas[index].correcta) {
+                resultado.textContent = "Respuesta correcta";
+                resultado.className = "correcta resultado";
+                correctas++;
+            } else {
+                resultado.textContent = "Respuesta incorrecta";
+                resultado.className = "incorrecta resultado";
+                incorrectas++;
+
+                if (opciones[preguntasMezcladas[index].correcta]) {
+                    opciones[preguntasMezcladas[index].correcta].parentElement.classList.add("respuesta-correcta");
+                }
+            }
+
+            divPregunta.appendChild(resultado);
+        });
+
+        // Mostrar los resultados finales
+        const contenedorResultados = document.getElementById("resultados");
+        contenedorResultados.innerHTML = `
+            <p class="correcta">Respuestas correctas: ${correctas}</p>
+            <p class="incorrecta">Respuestas incorrectas: ${incorrectas}</p>
+        `;
+
+        // Actualizar el icono de la cara según el resultado
+        actualizarIconoCara(correctas, preguntasMezcladas.length, contenedorResultados);
+    }
+
+    function actualizarIconoCara(correctas, total, contenedor) {
+        let carita = '';
+        if (correctas === total) {
+            carita = generarFraseRomantica() + ' 😊'; // Todas correctas
+        } else if (correctas > 0) {
+            carita = '=/'; // Algunas correctas
+        } else {
+            carita = '😞'; // Ninguna correcta
+        }
+        const caritaResultado = document.createElement("p");
+        caritaResultado.style.fontSize = "24px";
+        caritaResultado.textContent = `Resultado: ${carita}`;
+        contenedor.appendChild(caritaResultado);
+    }
+
+    const sujetos = [
+    "Tu sonrisa",
+    "Tus ojos",
+    "Tu voz",
+    "Tu presencia",
+    "Tu risa",
+    "Tu mirada",
+    "Tu alma",
+    "Tu ser",
+    "Tu dulzura",
+    "Tu ternura"
+    ];
+
+    const verbos = [
+        "ilumina",
+        "alegra",
+        "conquista",
+        "inspira",
+        "embellece",
+        "completa",
+        "enriquece",
+        "colorea",
+        "enciende",
+        "transforma"
+    ];
+
+    const adverbios = [
+        "profundamente",
+        "eternamente",
+        "infinitamente",
+        "sinceramente",
+        "apasionadamente",
+        "dulcemente",
+        "intensamente",
+        "ardientemente",
+        "inexplicablemente",
+        "maravillosamente"
+    ];
+
+    const complementos = [
+        "mi corazón",
+        "mi alma",
+        "mi mundo",
+        "mi vida",
+        "mis días",
+        "mis noches",
+        "mis sueños",
+        "mis pensamientos",
+        "mi existencia",
+        "mi universo"
+    ];
+
+    const adjetivos = [
+        "hermoso",
+        "maravilloso",
+        "increíble",
+        "mágico",
+        "especial",
+        "único",
+        "radiante",
+        "espléndido",
+        "sublime",
+        "encantador"
+    ];
+
+    function generarFraseRomantica() {
+        const sujeto = sujetos[Math.floor(Math.random() * sujetos.length)];
+        const verbo = verbos[Math.floor(Math.random() * verbos.length)];
+        const adverbio = adverbios[Math.floor(Math.random() * adverbios.length)];
+        const complemento = complementos[Math.floor(Math.random() * complementos.length)];
+        const adjetivo = adjetivos[Math.floor(Math.random() * adjetivos.length)];
+        return `${sujeto} ${verbo} ${adverbio} ${complemento}`;
+    }
+
+
+
+
+
+    // Función para cargar el número de preguntas seleccionadas
+    function cargarPreguntas() {
+        const selectElement = document.getElementById("numPreguntas");
+        const numPreguntasSeleccionadas = selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value);
+
+        // Mezclar y seleccionar las primeras 'numPreguntasSeleccionadas' preguntas
+        preguntasMezcladas = mezclar([...preguntas]).slice(0, numPreguntasSeleccionadas);
+
+        // Limpiar el contenedor de preguntas antes de cargar nuevas
+        const contenedorPreguntas = document.getElementById("preguntas");
+        contenedorPreguntas.innerHTML = ""; 
+
+        // Generar el cuestionario con el número de preguntas seleccionadas
+        preguntasMezcladas.forEach((pregunta, index) => {
+            const divPregunta = document.createElement("div");
+            divPregunta.className = "pregunta";
+            divPregunta.innerHTML = `<p><strong style='color:black;font-weight:bold'>${index + 1}:</strong> ${pregunta.pregunta}</p>`;
+
+            pregunta.opciones.forEach((opcion, i) => {
+                const opcionHtml = `
+                    <label>
+                        <input type="radio" name="pregunta${index}" value="${i}">
+                        ${opcion}
+                    </label><br>
+                `;
+                divPregunta.innerHTML += opcionHtml;
+            });
+
+            contenedorPreguntas.appendChild(divPregunta);
+        });
+    }
+
+    // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
+    window.onload = cargarPreguntas;
+
+</script>
+
+</body>
+</html>
