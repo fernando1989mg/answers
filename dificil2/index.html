@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Aleatorio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .pregunta {
+            margin-bottom: 40px; /* Aumenta la separación entre las preguntas */
+        }
+        .pregunta p {
+            font-weight: bold;
+            margin-bottom: 20px; /* Aumenta la separación entre el texto de la pregunta y las opciones */
+            color: #555;
+        }
+        label {
+            display: block;
+            margin-bottom: 15px; /* Aumenta la separación entre las alternativas */
+            padding-left: 10px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .correcta {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrecta {
+            color: red;
+            font-weight: bold;
+        }
+        .resultado {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .correcta.resultado {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrecta.resultado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .respuesta-correcta {
+            background-color: #f1fcdc; /* Fondo verde sutil */
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .selector-preguntas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .selector-preguntas label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .selector-preguntas select {
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Media query para pantallas móviles (por debajo de 600px de ancho) */
+        @media only screen and (max-width: 600px) {
+            body {
+                font-size: 18px; /* Aumenta el tamaño del texto para móviles */
+            }
+
+            h1 {
+                font-size: 24px; /* Aumenta el tamaño del título en móviles */
+            }
+
+            button {
+                font-size: 18px; /* Aumenta el tamaño del texto del botón en móviles */
+            }
+
+            .pregunta p {
+                font-size: 19px; /* Aumenta el tamaño del texto de las preguntas en móviles */
+            }
+
+            label {
+                font-size: 19px; /* Aumenta el tamaño del texto de las opciones en móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cuestionario</h1>
+<div class="selector-preguntas">
+    <label for="numPreguntas">Número de preguntas: </label>
+    <select id="numPreguntas" onchange="cargarPreguntas()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="todas" selected>Todas</option>
+    </select>
+</div>
+
+<form id="cuestionario">
+    <div id="preguntas"></div>
+    <button type="button" onclick="validarRespuestas()">Validar Respuestas</button>
+    <div id="resultados"></div>
+</form>
+
+<p>rama main</p>
+<script>
+    const preguntas = [
+        {
+            "pregunta": "El alcohol se detecta en la sangre 5 minutos después de haber sido ingerido, mientras que la tasa de alcoholemia alcanza su nivel máximo en promedio:",
+            "opciones": [
+                "En 1 hora después de haber tomado",
+                "En 5 minutos después de haber tomado",
+                "En 30 minutos después de haber tomado"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "En el uso de medicamentos en la conducción, ¿Cuál de las siguientes afirmaciones es verdadera?",
+            "opciones": [
+            "Algunos medicamentos disminuyen la atención y aumentan el tiempo de reacción al conducir.",
+            "Los medicamentos no afectan la capacidad de conducir.",
+            "En ningún caso se debe conducir mientras se toman medicamentos."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "El alcohol se detecta en la sangre 5 minutos después de haber sido ingerido, mientras que la tasa de alcoholemia alcanza su nivel máximo en promedio:",
+            "opciones": [
+            "En 1 hora después de haber tomado",
+            "En 5 minutos después de haber tomado",
+            "En 30 minutos después de haber tomado"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "¿Cuál (es) de las siguientes afirmaciones es (son) verdaderas en relación al cambio de aceite de un vehículo?",
+            "opciones": [
+            "Los cambios de aceite son mayormente innecesarios, salvo cuando falla el filtro.",
+            "Si se realizan cambios de aceite con mayor frecuencia a la estipulada por los fabricantes el sistema de lubricación aumentará el rozamiento.",
+            "Si el cambio de aceite no se realiza con la frecuencia estipulada por el fabricante, el motor se desgastará."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Cuántos niños y adolescentes fallecieron durante la última década en Chile debido a los accidentes de tránsito aproximadamente?",
+            "opciones": [
+            "550 niños y adolescentes",
+            "497 niños y adolescentes",
+            "800 niños y adolescentes",
+            "1007 niños y adolescentes"
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "Teniendo en cuenta las estadísticas de siniestros en Chile, ¿qué afirmación es correcta?",
+            "opciones": [
+            "La mayor parte de los fallecidos por siniestros de tránsito se produce en vías interurbanas o no urbanas.",
+            "El grupo etario de mayor accidentabilidad son los jóvenes, entre 18 y 20 años",
+            "Los períodos de mayor accidentabilidad coinciden con los días lunes"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "Encuestas a nivel mundial estiman que las mujeres jóvenes:",
+            "opciones": [
+            "Subvaloran su capacidad para conducir.",
+            "Sobreestiman su habilidad para conducir.",
+            "Creen que los accidentes dependen del tránsito."
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "Para una mejor visibilidad de los motociclistas, los cascos deben contar con:",
+            "opciones": [
+            "Áreas retrorreflectantes de color azul en su parte posterior",
+            "Áreas retrorreflectantes de color amarillo en sus partes laterales.",
+            "Áreas retrorreflectantes de color rojo en su parte posterior y laterales.",
+            "Áreas retrorreflectantes de color blanco en su parte posterior y laterales."
+            ],
+            "correcta": 3
+        },
+        {
+            "pregunta": "¿Qué provoca el dióxido de carbono según el libro para la conducción en Chile?",
+            "opciones": [
+            "Provoca irritación en las mucosas y el sistema respiratorio",
+            "Provoca lesiones en el sistema nervioso central.",
+            "Contribuye al efecto invernadero."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿Qué debería hacer un conductor al aproximarse a una cima y tiene poca visibilidad?",
+            "opciones": [
+            "Reducir obligatoriamente la velocidad y mantenerse a la derecha",
+            "Situarse al centro de la calzada para tener una mejor visibilidad en la cúspide de la cima",
+            "Aumentar la velocidad para reducir el tiempo de poca visibilidad"
+            ],
+            "correcta": 0
+        },
+        {
+            "pregunta": "La fatiga al momento de conducir provoca alteraciones en la toma de decisiones de un conductor, ¿Cuál no sería una de ellas?",
+            "opciones": [
+            "La cantidad y calidad de información que se recoge del entorno disminuye, lo que facilita malinterpretar situaciones o comportamientos de los demás.",
+            "El tiempo de reacción se incrementará, lo que facilitará el ver los obstáculos con mayor eficacia reduciendo situaciones de peligro.",
+            "El razonamiento del conductor estará gravemente afectado y probablemente las decisiones que tome no serán las más adecuadas o las más seguras."
+            ],
+            "correcta": 1
+        },
+        {
+            "pregunta": "Un denominador común entre los nuevos conductores es que:",
+            "opciones": [
+            "Creen que los accidentes dependen del tránsito.",
+            "Se consideran peores que el promedio.",
+            "Se consideran mejores que el promedio."
+            ],
+            "correcta": 2
+        },
+        {
+            "pregunta": "¿A qué se debe la emisión de humos visibles por el tubo de escape?",
+            "opciones": [
+            "Esta quemando bien el combustible.",
+            "Mala combustión del motor.",
+            "Tubo de escape roto.",
+            "Falta de aceite."
+            ],
+            "correcta": 1
+        },
+        {
+        "question": "¿Qué significa que un neumático esté 're-dibujado'?",
+        "options": [
+            {
+                "text": "Que evidencie profundizaciones de los surcos en la banda de rodamiento.",
+                "is_correct": true
+            },
+            {
+                "text": "Que haya perdido sus condiciones de adherencia el pavimento.",
+                "is_correct": false
+            },
+            {
+                "text": "Que muestra alteraciones en su índice de carga.",
+                "is_correct": false
+            }
+        ]
+        },
+        {
+            "question": "¿Por qué los neumáticos deben mantenerse a la presión indicada por el fabricante?",
+            "options": [
+                {
+                    "text": "Para no desgastar el motor.",
+                    "is_correct": false
+                },
+                {
+                    "text": "Para ayudar a evitar que el automóvil se roncee.",
+                    "is_correct": true
+                },
+                {
+                    "text": "Para que el vehículo se mantenga a la altura correcta sobre la vía.",
+                    "is_correct": false
+                }
+            ]
+        },
+        {
+            "question": "¿Cuál es la función de los frenos ABS?",
+            "options": [
+                {
+                    "text": "Evitar que las ruedas se bloqueen cuando se frena.",
+                    "is_correct": true
+                },
+                {
+                    "text": "Alivianar la fuerza ejercida sobre el pedal de freno.",
+                    "is_correct": false
+                },
+                {
+                    "text": "Dar mayor potencia de frenado a las ruedas.",
+                    "is_correct": false
+                },
+                {
+                    "text": "Complementar la operación de la transmisión automática.",
+                    "is_correct": false
+                }
+            ]
+        },
+        {
+            "question": "¿De qué forma se calcula la distancia de reacción?",
+            "options": [
+                {
+                    "text": "Multiplicando por tres la primera cifra de la velocidad.",
+                    "is_correct": true
+                },
+                {
+                    "text": "Multiplicando por cuatro la primera cifra de la velocidad.",
+                    "is_correct": false
+                },
+                {
+                    "text": "Multiplicando por cinco la primera cifra de la velocidad.",
+                    "is_correct": false
+                }
+            ]
+        },
+        {
+            "question": "¿Con qué líquido debemos rellenar la batería si esta se encuentra con un bajo nivel de líquido?",
+            "options": [
+                {
+                    "text": "Agua destilada",
+                    "is_correct": true
+                },
+                {
+                    "text": "Líquido refrigerante",
+                    "is_correct": false
+                },
+                {
+                    "text": "Bicarbonato con agua",
+                    "is_correct": false
+                },
+                {
+                    "text": "Agua de la llave",
+                    "is_correct": false
+                }
+            ]
+        },
+        {
+            "question": "En caso de un accidente vehicular, ¿el seguro obligatorio de accidentes personales cubre los daños a los vehículos involucrados?",
+            "options": [
+                {
+                    "text": "No, pues solo ampara los riesgos de muerte y lesiones de las personas a consecuencia del accidente.",
+                    "is_correct": true
+                },
+                {
+                    "text": "Sí, hasta un 25% de los daños si se deja constancia en la policía.",
+                    "is_correct": false
+                },
+                {
+                    "text": "Sí, hasta un 50% de los daños si se deja constancia en la policía.",
+                    "is_correct": false
+                }
+            ]
+        },
+        {
+            "question": "Al conducir en la oscuridad, sus posibilidades de descubrir un obstáculo dependen de...",
+            "options": [
+                {
+                    "text": "La hora.",
+                    "is_correct": false
+                },
+                {
+                    "text": "El estado del camino.",
+                    "is_correct": false
+                },
+                {
+                    "text": "La potencia y ajuste de sus luces.",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "question": "Cuando abandonamos una autopista, ¿es probable que percibamos que nuestra velocidad es...?",
+            "options": [
+                {
+                    "text": "Menor que la real a la que circulamos.",
+                    "is_correct": true
+                },
+                {
+                    "text": "Igual a la real a la que circulamos.",
+                    "is_correct": false
+                },
+                {
+                    "text": "Mayor que la real a la que circulamos.",
+                    "is_correct": false
+                }
+            ]
+        }
+    ];
+
+    let preguntasMezcladas = [];
+
+    
+
+    // Función para mezclar las preguntas
+    function mezclar(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Intercambiar elementos
+        }
+        return array;
+    }
+
+
+    function validarRespuestas() {
+        let correctas = 0;
+        let incorrectas = 0;
+
+        const contenedorPreguntas = document.getElementById("preguntas").children;
+
+        Array.from(contenedorPreguntas).forEach((divPregunta, index) => {
+            const opciones = document.getElementsByName(`pregunta${index}`);
+            let seleccionada = -1;
+
+            for (let i = 0; i < opciones.length; i++) {
+                if (opciones[i].checked) {
+                    seleccionada = parseInt(opciones[i].value);
+                    break;
+                }
+            }
+
+            const resultado = document.createElement("p");
+            if (seleccionada === preguntasMezcladas[index].correcta) {
+                resultado.textContent = "Respuesta correcta";
+                resultado.className = "correcta resultado";
+                correctas++;
+            } else {
+                resultado.textContent = "Respuesta incorrecta";
+                resultado.className = "incorrecta resultado";
+                incorrectas++;
+
+                if (opciones[preguntasMezcladas[index].correcta]) {
+                    opciones[preguntasMezcladas[index].correcta].parentElement.classList.add("respuesta-correcta");
+                }
+            }
+
+            divPregunta.appendChild(resultado);
+        });
+
+        // Mostrar los resultados finales
+        const contenedorResultados = document.getElementById("resultados");
+        contenedorResultados.innerHTML = `
+            <p class="correcta">Respuestas correctas: ${correctas}</p>
+            <p class="incorrecta">Respuestas incorrectas: ${incorrectas}</p>
+        `;
+
+        // Actualizar el icono de la cara según el resultado
+        actualizarIconoCara(correctas, preguntasMezcladas.length, contenedorResultados);
+    }
+
+    function actualizarIconoCara(correctas, total, contenedor) {
+        let carita = '';
+        if (correctas === total) {
+            carita = generarFraseRomantica() + ' 😊'; // Todas correctas
+        } else if (correctas > 0) {
+            carita = '=/'; // Algunas correctas
+        } else {
+            carita = '😞'; // Ninguna correcta
+        }
+        const caritaResultado = document.createElement("p");
+        caritaResultado.style.fontSize = "24px";
+        caritaResultado.textContent = `Resultado: ${carita}`;
+        contenedor.appendChild(caritaResultado);
+    }
+
+    const sujetos = [
+    "Tu sonrisa",
+    "Tus ojos",
+    "Tu voz",
+    "Tu presencia",
+    "Tu risa",
+    "Tu mirada",
+    "Tu alma",
+    "Tu ser",
+    "Tu dulzura",
+    "Tu ternura"
+    ];
+
+    const verbos = [
+        "ilumina",
+        "alegra",
+        "conquista",
+        "inspira",
+        "embellece",
+        "completa",
+        "enriquece",
+        "colorea",
+        "enciende",
+        "transforma"
+    ];
+
+    const adverbios = [
+        "profundamente",
+        "eternamente",
+        "infinitamente",
+        "sinceramente",
+        "apasionadamente",
+        "dulcemente",
+        "intensamente",
+        "ardientemente",
+        "inexplicablemente",
+        "maravillosamente"
+    ];
+
+    const complementos = [
+        "mi corazón",
+        "mi alma",
+        "mi mundo",
+        "mi vida",
+        "mis días",
+        "mis noches",
+        "mis sueños",
+        "mis pensamientos",
+        "mi existencia",
+        "mi universo"
+    ];
+
+    const adjetivos = [
+        "hermoso",
+        "maravilloso",
+        "increíble",
+        "mágico",
+        "especial",
+        "único",
+        "radiante",
+        "espléndido",
+        "sublime",
+        "encantador"
+    ];
+
+    function generarFraseRomantica() {
+        const sujeto = sujetos[Math.floor(Math.random() * sujetos.length)];
+        const verbo = verbos[Math.floor(Math.random() * verbos.length)];
+        const adverbio = adverbios[Math.floor(Math.random() * adverbios.length)];
+        const complemento = complementos[Math.floor(Math.random() * complementos.length)];
+        const adjetivo = adjetivos[Math.floor(Math.random() * adjetivos.length)];
+        return `${sujeto} ${verbo} ${adverbio} ${complemento}`;
+    }
+
+
+
+
+
+    // Función para cargar el número de preguntas seleccionadas
+    function cargarPreguntas() {
+        const selectElement = document.getElementById("numPreguntas");
+        const numPreguntasSeleccionadas = selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value);
+
+        // Mezclar y seleccionar las primeras 'numPreguntasSeleccionadas' preguntas
+        preguntasMezcladas = mezclar([...preguntas]).slice(0, numPreguntasSeleccionadas);
+
+        // Limpiar el contenedor de preguntas antes de cargar nuevas
+        const contenedorPreguntas = document.getElementById("preguntas");
+        contenedorPreguntas.innerHTML = ""; 
+
+        // Generar el cuestionario con el número de preguntas seleccionadas
+        preguntasMezcladas.forEach((pregunta, index) => {
+            const divPregunta = document.createElement("div");
+            divPregunta.className = "pregunta";
+            divPregunta.innerHTML = `<p><strong style='color:black;font-weight:bold'>${index + 1}:</strong> ${pregunta.pregunta}</p>`;
+
+            pregunta.opciones.forEach((opcion, i) => {
+                const opcionHtml = `
+                    <label>
+                        <input type="radio" name="pregunta${index}" value="${i}">
+                        ${opcion}
+                    </label><br>
+                `;
+                divPregunta.innerHTML += opcionHtml;
+            });
+
+            contenedorPreguntas.appendChild(divPregunta);
+        });
+    }
+
+    // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
+    window.onload = cargarPreguntas;
+
+</script>
+
+</body>
+</html>
