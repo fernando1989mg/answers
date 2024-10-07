@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Aleatorio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .pregunta {
+            margin-bottom: 40px; /* Aumenta la separación entre las preguntas */
+        }
+        .pregunta p {
+            font-weight: bold;
+            margin-bottom: 20px; /* Aumenta la separación entre el texto de la pregunta y las opciones */
+            color: #555;
+        }
+        label {
+            display: block;
+            margin-bottom: 15px; /* Aumenta la separación entre las alternativas */
+            padding-left: 10px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .correcta {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrecta {
+            color: red;
+            font-weight: bold;
+        }
+        .resultado {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .correcta.resultado {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrecta.resultado {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .respuesta-correcta {
+            background-color: #f1fcdc; /* Fondo verde sutil */
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .selector-preguntas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .selector-preguntas label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .selector-preguntas select {
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Media query para pantallas móviles (por debajo de 600px de ancho) */
+        @media only screen and (max-width: 600px) {
+            body {
+                font-size: 18px; /* Aumenta el tamaño del texto para móviles */
+            }
+
+            h1 {
+                font-size: 24px; /* Aumenta el tamaño del título en móviles */
+            }
+
+            button {
+                font-size: 18px; /* Aumenta el tamaño del texto del botón en móviles */
+            }
+
+            .pregunta p {
+                font-size: 19px; /* Aumenta el tamaño del texto de las preguntas en móviles */
+            }
+
+            label {
+                font-size: 19px; /* Aumenta el tamaño del texto de las opciones en móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cuestionario</h1>
+<div class="selector-preguntas">
+    <label for="numPreguntas">Número de preguntas: </label>
+    <select id="numPreguntas" onchange="cargarPreguntas()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="todas" selected>Todas</option>
+    </select>
+</div>
+
+<form id="cuestionario">
+    <div id="preguntas"></div>
+    <button type="button" onclick="validarRespuestas()">Validar Respuestas</button>
+    <div id="resultados"></div>
+</form>
+
+<p>rama main</p>
+<script>
+    const preguntas = [
+    {
+        "pregunta": "¿Qué sanción corresponde si manejas con una alcoholemia entre 0,31 y 0,79 g/l y causas daños materiales o lesiones leves?",
+        "opciones": [
+            "Suspensión de licencia por 6 meses y multa de 1 a 5 UTM.",
+            "Suspensión de licencia por 9 meses y multa de 4 a 10 UTM o 1 a 20 días.",
+            "Suspensión de licencia por 18 a 36 meses y multa de 11 a 20 UTM."
+        ],
+        "correcta": 1
+    },
+    {
+        "pregunta": "¿Cuál es la sanción por reincidencia al manejar bajo la influencia del alcohol (0,31 a 0,79 g/l) y causar lesiones graves?",
+        "opciones": [
+            "Suspensión de licencia por 36 a 60 meses y multa de 21 a 30 UTM.",
+            "Suspensión de licencia por 48 a 72 meses, junto con la pena respectiva.",
+            "Suspensión de licencia por 9 meses y multa de 4 a 10 UTM."
+        ],
+        "correcta": 2
+    },
+    {
+        "pregunta": "Si causas la muerte a una persona en estado de ebriedad (0,8 g/l o más), ¿cuál es la sanción?",
+        "opciones": [
+            "Multa de 2 a 10 UTM y suspensión de licencia por 5 años.",
+            "Inhabilidad de por vida para conducir y comiso del vehículo.",
+            "Multa de 8 a 20 UTM y pena de prisión de 541 días a 3 años."
+        ],
+        "correcta": 1
+    },
+    {
+        "pregunta": "¿Qué sanción aplica por manejar con 0,8 g/l o más y sin causar daño o lesiones?",
+        "opciones": [
+            "Suspensión de licencia por 2 años y multa de 2 a 10 UTM.",
+            "Suspensión de licencia por 1 año y multa de 1 a 5 UTM.",
+            "Suspensión de licencia por 36 meses y multa de 4 a 12 UTM."
+        ],
+        "correcta": 0
+    },
+    {
+        "pregunta": "¿Qué sanción se aplica si causas lesiones gravísimas en estado de ebriedad o bajo la influencia de estupefacientes?",
+        "opciones": [
+            "Suspensión de licencia por 5 años y multa de 8 a 20 UTM.",
+            "Inhabilidad de por vida y comiso del vehículo.",
+            "Suspensión de licencia por 36 meses y multa de 4 a 12 UTM."
+        ],
+        "correcta": 1
+    },
+    {
+        "pregunta": "En caso de reincidencia por manejar bajo la influencia del alcohol y causar lesiones gravísimas o la muerte, ¿qué sanción se aplica?",
+        "opciones": [
+            "Suspensión de licencia por 5 años.",
+            "Inhabilidad de por vida para conducir.",
+            "Suspensión de licencia por 2 años y multa de 2 a 10 UTM."
+        ],
+        "correcta": 1
+    }
+]
+;
+
+    let preguntasMezcladas = [];
+
+    
+
+    // Función para mezclar las preguntas
+    function mezclar(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Intercambiar elementos
+        }
+        return array;
+    }
+
+
+    function validarRespuestas() {
+        let correctas = 0;
+        let incorrectas = 0;
+
+        const contenedorPreguntas = document.getElementById("preguntas").children;
+
+        Array.from(contenedorPreguntas).forEach((divPregunta, index) => {
+            const opciones = document.getElementsByName(`pregunta${index}`);
+            let seleccionada = -1;
+
+            for (let i = 0; i < opciones.length; i++) {
+                if (opciones[i].checked) {
+                    seleccionada = parseInt(opciones[i].value);
+                    break;
+                }
+            }
+
+            const resultado = document.createElement("p");
+            if (seleccionada === preguntasMezcladas[index].correcta) {
+                resultado.textContent = "Respuesta correcta";
+                resultado.className = "correcta resultado";
+                correctas++;
+            } else {
+                resultado.textContent = "Respuesta incorrecta";
+                resultado.className = "incorrecta resultado";
+                incorrectas++;
+
+                if (opciones[preguntasMezcladas[index].correcta]) {
+                    opciones[preguntasMezcladas[index].correcta].parentElement.classList.add("respuesta-correcta");
+                }
+            }
+
+            divPregunta.appendChild(resultado);
+        });
+
+        // Mostrar los resultados finales
+        const contenedorResultados = document.getElementById("resultados");
+        contenedorResultados.innerHTML = `
+            <p class="correcta">Respuestas correctas: ${correctas}</p>
+            <p class="incorrecta">Respuestas incorrectas: ${incorrectas}</p>
+        `;
+
+        // Actualizar el icono de la cara según el resultado
+        actualizarIconoCara(correctas, preguntasMezcladas.length, contenedorResultados);
+    }
+
+    function actualizarIconoCara(correctas, total, contenedor) {
+        let carita = '';
+        if (correctas === total) {
+            carita = generarFraseRomantica() + ' 😊'; // Todas correctas
+        } else if (correctas > 0) {
+            carita = '=/'; // Algunas correctas
+        } else {
+            carita = '😞'; // Ninguna correcta
+        }
+        const caritaResultado = document.createElement("p");
+        caritaResultado.style.fontSize = "24px";
+        caritaResultado.textContent = `Resultado: ${carita}`;
+        contenedor.appendChild(caritaResultado);
+    }
+
+    const sujetos = [
+    "Tu sonrisa",
+    "Tus ojos",
+    "Tu voz",
+    "Tu presencia",
+    "Tu risa",
+    "Tu mirada",
+    "Tu alma",
+    "Tu ser",
+    "Tu dulzura",
+    "Tu ternura"
+    ];
+
+    const verbos = [
+        "ilumina",
+        "alegra",
+        "conquista",
+        "inspira",
+        "embellece",
+        "completa",
+        "enriquece",
+        "colorea",
+        "enciende",
+        "transforma"
+    ];
+
+    const adverbios = [
+        "profundamente",
+        "eternamente",
+        "infinitamente",
+        "sinceramente",
+        "apasionadamente",
+        "dulcemente",
+        "intensamente",
+        "ardientemente",
+        "inexplicablemente",
+        "maravillosamente"
+    ];
+
+    const complementos = [
+        "mi corazón",
+        "mi alma",
+        "mi mundo",
+        "mi vida",
+        "mis días",
+        "mis noches",
+        "mis sueños",
+        "mis pensamientos",
+        "mi existencia",
+        "mi universo"
+    ];
+
+    const adjetivos = [
+        "hermoso",
+        "maravilloso",
+        "increíble",
+        "mágico",
+        "especial",
+        "único",
+        "radiante",
+        "espléndido",
+        "sublime",
+        "encantador"
+    ];
+
+    function generarFraseRomantica() {
+        const sujeto = sujetos[Math.floor(Math.random() * sujetos.length)];
+        const verbo = verbos[Math.floor(Math.random() * verbos.length)];
+        const adverbio = adverbios[Math.floor(Math.random() * adverbios.length)];
+        const complemento = complementos[Math.floor(Math.random() * complementos.length)];
+        const adjetivo = adjetivos[Math.floor(Math.random() * adjetivos.length)];
+        return `${sujeto} ${verbo} ${adverbio} ${complemento}`;
+    }
+
+
+
+
+
+    // Función para cargar el número de preguntas seleccionadas
+    function cargarPreguntas() {
+        const selectElement = document.getElementById("numPreguntas");
+        const numPreguntasSeleccionadas = selectElement.value === "todas" ? preguntas.length : parseInt(selectElement.value);
+
+        // Mezclar y seleccionar las primeras 'numPreguntasSeleccionadas' preguntas
+        preguntasMezcladas = mezclar([...preguntas]).slice(0, numPreguntasSeleccionadas);
+
+        // Limpiar el contenedor de preguntas antes de cargar nuevas
+        const contenedorPreguntas = document.getElementById("preguntas");
+        contenedorPreguntas.innerHTML = ""; 
+
+        // Generar el cuestionario con el número de preguntas seleccionadas
+        preguntasMezcladas.forEach((pregunta, index) => {
+            const divPregunta = document.createElement("div");
+            divPregunta.className = "pregunta";
+            divPregunta.innerHTML = `<p><strong style='color:black;font-weight:bold'>${index + 1}:</strong> ${pregunta.pregunta}</p>`;
+
+            pregunta.opciones.forEach((opcion, i) => {
+                const opcionHtml = `
+                    <label>
+                        <input type="radio" name="pregunta${index}" value="${i}">
+                        ${opcion}
+                    </label><br>
+                `;
+                divPregunta.innerHTML += opcionHtml;
+            });
+
+            contenedorPreguntas.appendChild(divPregunta);
+        });
+    }
+
+    // Ejecutar la función al cargar la página para que el cuestionario se cargue según el valor predeterminado del combobox
+    window.onload = cargarPreguntas;
+
+</script>
+
+</body>
+</html>
